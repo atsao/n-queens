@@ -18,11 +18,49 @@ window.findNRooksSolution = function(n) {
   var solutionRows = solution.rows();
   
   // Ensure new solution gets created
-  if (arguments[1] !== undefined) {
-    solution = arguments[1];
+  // if (arguments[1] !== undefined) {
+  //   solution = arguments[1];
+  // }
+  //storing solution boards
+  var solns = [];
+  function subroutine (changeX, changeY, nTimes) {
+    //store row that is changing
+    //var row = board.rows()[0];
+    var tempBoard = new Board({'n': n});
+    //initial toggle
+    //iterate through x of board
+    tempBoard.togglePiece(changeX,changeY);
+    for (var x = 0; x < n; x++) {
+      //iterate through y of board
+      for (var y = 0; y < n; y++) {
+        //check if square is empty
+        if (tempBoard.rows()[x][y] === 0) {
+          //add piece
+          tempBoard.togglePiece(x, y);
+          //check if piece has confict at row or collumn
+          if (tempBoard.hasRowConflictAt(x) || tempBoard.hasColConflictAt(y)) {
+              //change square to empty if conflict exists
+              tempBoard.togglePiece(x, y);
+          }
+        }
+        // console.log(tempBoard.attributes, 'tempBoard');
+      }
+    }
+    solns.push(tempBoard);
+    // nTimes -= 1;
+    // if (nTimes > 0) {
+    //   subroutine(nTimes,nTimes,nTimes);
+    // }
+  }
+  for (x = 0; x < n; x++){
+    for (y = 0; y < n; y++) {
+      subroutine(x,y);
+    }
   }
 
-  console.log('solution before:', solution);
+  // subroutine(0, 0, n);
+
+  //console.log('solution before:', solution);
 
   if (n === 1) {
     solution.togglePiece(0, 0);
@@ -30,10 +68,10 @@ window.findNRooksSolution = function(n) {
   }
 
 
-  var xPositions = _.map(_.range(0, n), function(number) { return number; });
-  var yPositions = xPositions.slice();
-  var xBag = xPositions.slice();
-  var yBag = xPositions.slice();
+  // var xPositions = _.map(_.range(0, n), function(number) { return number; });
+  // var yPositions = xPositions.slice();
+  // var xBag = xPositions.slice();
+  // var yBag = xPositions.slice();
 
   // In xBag, grab one item
   // In yBag, grab one item
@@ -41,31 +79,26 @@ window.findNRooksSolution = function(n) {
 
   // splice() each bag - to remove the grabbed values
 
-  // Next rook take the next items from each bag
+  // Next rook take the next items from each
 
-  for (var x = 0; x < xPositions.length; x++) {
+  // for (var x = 0; x < xPositions.length; x++) {
 
-    for (var y = 0; y < yPositions.length; y++) {
+  //   for (var y = 0; y < yPositions.length; y++) {
 
-    }
-  }
-
-  // for (var x = 0; x < n; x++) {
-  //   for (var y = 0; y < solutionRows.length; y++) {
-  //     if (rows[x][y] === 0) {
-  //       solution.togglePiece(x, y);
-  //       if (solution.hasRowConflictAt(x) || solution.hasColConflictAt(y)) {
-  //         solution.togglePiece(x, y);
-  //       }
-  //     }
   //   }
   // }
 
-  console.log(solution);
+  
+
+  //console.log(solution);
 
 
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+  //console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  console.log(solns.length, '# of sols');
+  _.each(solns, function(s) {
+    console.log(s.attributes);
+  })
+  return solns;
 };
 
 
