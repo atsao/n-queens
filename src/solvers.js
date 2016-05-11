@@ -29,16 +29,37 @@ window.findNRooksSolution = function(n) {
     return solution;
   }
 
-  for (var x = 0; x < n; x++) {
-    for (var y = 0; y < solutionRows.length; y++) {
-      if (rows[x][y] === 0) {
-        solution.togglePiece(x, y);
-        if (solution.hasRowConflictAt(x) || solution.hasColConflictAt(y)) {
-          solution.togglePiece(x, y);
-        }
-      }
+
+  var xPositions = _.map(_.range(0, n), function(number) { return number; });
+  var yPositions = xPositions.slice();
+  var xBag = xPositions.slice();
+  var yBag = xPositions.slice();
+
+  // In xBag, grab one item
+  // In yBag, grab one item
+  // This is the first rook's position - togglePiece on this position in an empty board
+
+  // splice() each bag - to remove the grabbed values
+
+  // Next rook take the next items from each bag
+
+  for (var x = 0; x < xPositions.length; x++) {
+
+    for (var y = 0; y < yPositions.length; y++) {
+
     }
   }
+
+  // for (var x = 0; x < n; x++) {
+  //   for (var y = 0; y < solutionRows.length; y++) {
+  //     if (rows[x][y] === 0) {
+  //       solution.togglePiece(x, y);
+  //       if (solution.hasRowConflictAt(x) || solution.hasColConflictAt(y)) {
+  //         solution.togglePiece(x, y);
+  //       }
+  //     }
+  //   }
+  // }
 
   console.log(solution);
 
