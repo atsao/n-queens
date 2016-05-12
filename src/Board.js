@@ -79,17 +79,18 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      var row = this.rows()[rowIndex];
-      var count = 0;
+      var row = this.rows()[rowIndex]; // .rows() returns array containing each row array
+      var count = 0; // Initialize count for conflicts
 
       for (var i = 0; i < row.length; i++) {
-        count += row[i];
+        count += row[i]; // Add up values in a row; 1 is a game piece
+
         if (count > 1) {
           return true;
         }
       }
 
-      return false; // fixme
+      return false;
     },
 
     // test if any rows on this board contain conflicts
@@ -102,7 +103,7 @@
         }
       }
 
-      return false; // fixme
+      return false;
     },
 
 
@@ -112,24 +113,25 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      var rows = this.rows(); // Grab all rows first
-      var count = 0; // Count for conflicts
+      var rows = this.rows(); // Array containing each row array
+      var count = 0; // Initialize count for conflicts
 
       for (var i = 0; i < rows.length; i++) {
         // rows[i] - indicates row
         // [colIndex] - column in that row
         count += rows[i][colIndex];
+
         if (count > 1) {
           return true;
         }
       }
 
-      return false; // fixme
+      return false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      var rows = this.rows(); // Array of all board rows
+      var rows = this.rows(); // Array containing each row array
 
       for (var i = 0; i < rows.length; i++) {
         if (this.hasColConflictAt(i)) {
@@ -137,7 +139,7 @@
         }
       }
 
-      return false; // fixme
+      return false;
     },
 
 
@@ -147,9 +149,12 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      var count = 0;
       var rows = this.rows();
+      var count = 0;
 
+      // Iterate through each row (x) and column position (y)
+      // ._getFirstRowColumnIndexForMajorDiagonalOn() returns value along major diagonal
+      // If parameter matches that value, count along that diagonal for game pieces
       for (var x = 0; x < rows.length; x++) {
         for (var y = 0; y < rows.length; y++) {
           if (this._getFirstRowColumnIndexForMajorDiagonalOn(x, y) === majorDiagonalColumnIndexAtFirstRow) {
@@ -162,13 +167,15 @@
         }
       }
 
-      return false; // fixme
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       var rows = this.rows();
 
+      // Iterate from -n to n - this is the range for possible major diagonal first row-column index values
+      // If at any point the check returns truthy, there's a diagonal conflict
       for (var i = -(this.get('n') - 1); i < this.get('n'); i++) {
         if (this.hasMajorDiagonalConflictAt(i)) {
           return true;
@@ -188,6 +195,9 @@
       var count = 0;
       var rows = this.rows();
 
+      // Iterate through each row (x) and column position (y)
+      // ._getFirstRowColumnIndexForMinorDiagonalOn() returns value along minr diagonal
+      // If parameter matches that value, count along that diagonal for game pieces
       for (var x = 0; x < rows.length; x++) {
         for (var y = 0; y < rows.length; y++) {
           if (this._getFirstRowColumnIndexForMinorDiagonalOn(x, y) === minorDiagonalColumnIndexAtFirstRow) {
@@ -207,6 +217,8 @@
     hasAnyMinorDiagonalConflicts: function() {
       var rows = this.rows();
 
+      // Iterate from n to 2n - this is the range for possible minor diagonal first row-column index values
+      // If at any point the check returns truthy, there's a diagonal conflict
       for (var i = 0; i < this.get('n') * 2 - 1; i++) {
         if (this.hasMinorDiagonalConflictAt(i)) {
           return true;
