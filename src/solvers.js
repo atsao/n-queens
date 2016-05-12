@@ -16,20 +16,38 @@
 window.findNRooksSolution = function(n) {
   var solution = new Board({'n': n}); //fixme
   var solutionRows = solution.rows();
-  
-  // Ensure new solution gets created
-  // if (arguments[1] !== undefined) {
-  //   solution = arguments[1];
-  // }
-  //storing solution boards
-  var solns = [];
-  function subroutine (changeX, changeY, nTimes) {
-    //store row that is changing
-    //var row = board.rows()[0];
-    var tempBoard = new Board({'n': n});
-    //initial toggle
-    //iterate through x of board
-    tempBoard.togglePiece(changeX,changeY);
+
+  var rowCombos = [];
+  var row = [];
+
+  for (var x = 0; x < n; x++) {
+    for (var i = 0; i < n; i++) {
+      if (i === x) {
+        row.push(1);
+      } else {
+        row.push(0);
+      }
+      // row.push(0);
+    }
+    rowCombos.push(row);
+    row = [];
+  }
+
+  // console.log('rowsCombos:', rowCombos);
+
+  var myBoard = [];
+  for (var a = 0; a < rowCombos.length; a++) {
+    var temp = [];
+    for (var b = 0; b < rowCombos[a].length; b++) {
+      var popped = rowCombos[a].pop();
+      temp.push(rowCombos[a]);
+    }
+    myBoard.push(temp);
+  }
+
+  console.log(myBoard);
+
+  function checkConflicts(board) {
     for (var x = 0; x < n; x++) {
       //iterate through y of board
       for (var y = 0; y < n; y++) {
@@ -46,17 +64,51 @@ window.findNRooksSolution = function(n) {
         // console.log(tempBoard.attributes, 'tempBoard');
       }
     }
-    solns.push(tempBoard);
-    // nTimes -= 1;
-    // if (nTimes > 0) {
-    //   subroutine(nTimes,nTimes,nTimes);
-    // }
   }
-  for (x = 0; x < n; x++){
-    for (y = 0; y < n; y++) {
-      subroutine(x,y);
-    }
-  }
+
+  
+  // Ensure new solution gets created
+  // if (arguments[1] !== undefined) {
+  //   solution = arguments[1];
+  // }
+  //storing solution boards
+//   var solns = [];
+//   function subroutine (changeX, changeY, nTimes) {
+//     //store row that is changing
+//     //var row = board.rows()[0];
+//     var tempBoard = new Board({'n': n});
+//     //initial toggle
+//     tempBoard.togglePiece(changeX, changeY);
+//     //iterate through x of board
+//     for (var x = 0; x < n; x++) {
+//       //iterate through y of board
+//       for (var y = 0; y < n; y++) {
+//         //check if square is empty
+//         if (tempBoard.rows()[x][y] === 0) {
+//           //add piece
+//           tempBoard.togglePiece(x, y);
+//           //check if piece has confict at row or collumn
+//           if (tempBoard.hasRowConflictAt(x) || tempBoard.hasColConflictAt(y)) {
+//               //change square to empty if conflict exists
+//               tempBoard.togglePiece(x, y);
+//           }
+//         }
+//         // console.log(tempBoard.attributes, 'tempBoard');
+//       }
+//     }
+//     solns.push(tempBoard);
+//     // nTimes -= 1;
+//     // if (nTimes > 0) {
+//     //   subroutine(nTimes,nTimes,nTimes);
+//     // }
+//   }
+//   // for (x = 0; x < n; x++){
+//   //   for (y = 0; y < n; y++) {
+//   //     subroutine(x,y);
+//   //   }
+//   // }
+
+// console.log(solns);
 
   // subroutine(0, 0, n);
 
