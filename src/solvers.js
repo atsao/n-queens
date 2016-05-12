@@ -36,7 +36,6 @@ window.findNRooksSolution = function(n) {
   for (var value in tempBoard.attributes) {
     if (value !== 'n') {
       answer.push(tempBoard.attributes[value]);
-      
     }
   }
 
@@ -51,33 +50,16 @@ window.findNRooksSolution = function(n) {
 window.countNRooksSolutions = function(n) {
   var solution = findNRooksSolution(n); //fixme
 
-  // var rowCombos = [];
-  // var row = [];
-
-  // for (var x = 0; x < n; x++) {
-  //   for (var i = 0; i < n; i++) {
-  //     if (i === x) {
-  //       row.push(1);
-  //     } else {
-  //       row.push(0);
-  //     }
-  //     // row.push(0);
-  //   }
-  //   rowCombos.push(row);
-  //   row = [];
+  // // Base case
+  // if (n === 1) {
+  //   return 1;
   // }
-
-  // Base case
-  if (n === 1) {
-    return 1;
-  }
   var comboArray = [];
   var positions = [];
   var input = '';
   for (var i = 0; i < n; i++) {
     input += '' + i;
   }
-  // console.log(input);
 
   function generateCombos(input, currentSequence) {
     var nextInput;
@@ -106,7 +88,7 @@ window.countNRooksSolutions = function(n) {
 
   solutionCount = comboArray.length;
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+  // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
 
@@ -115,6 +97,66 @@ window.countNRooksSolutions = function(n) {
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
   var solution = undefined; //fixme
+  var comboArray = [];
+  var positions = [];
+  var input = '';
+
+  if (n === 0) {
+    var tempBoard = new Board({'n': 0});
+    var answer = [];
+    for (var value in tempBoard.attributes) {
+      if (value !== 'n') {
+        answer.push(tempBoard.attributes[value]);
+      }
+    }
+    return answer;
+  }
+
+
+  for (var i = 0; i < n; i++) {
+    input += '' + i;
+  }
+
+  function generateCombos(input, currentSequence) {
+    var nextInput;
+    var remainingPositions;
+
+    if (input == '') {
+      positions.push(currentSequence);
+    } else {
+      for (var i = 0; i < input.length; i++) {
+        remainingPositions = input.substr(0, i) + input.substr(i + 1, input.length - 1);
+        nextInput = currentSequence + input[i];
+        generateCombos(remainingPositions, nextInput);
+      }
+    }
+  }
+
+  generateCombos(input, '');
+
+  for (var p = 0; p < positions.length; p++) {
+    var newBoard = new Board({'n': n});
+    for (var s = 0; s < positions[p].length; s++) {
+      newBoard.togglePiece(s, positions[p][s]);
+    }
+    if (!newBoard.hasAnyMajorDiagonalConflicts() && !newBoard.hasAnyMinorDiagonalConflicts()) {
+      console.log('passing?');
+      console.log('newBoard:', newBoard);
+      // var tempBoard = new Board({'n': 0});
+    var answer = [];
+    for (var value in newBoard.attributes) {
+      if (value !== 'n') {
+        answer.push(newBoard.attributes[value]);
+      }
+    }
+    return answer;
+      // return newBoard;
+    }
+    // comboArray.push(newBoard);
+  }
+
+
+
 
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
