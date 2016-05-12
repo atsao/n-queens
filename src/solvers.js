@@ -12,7 +12,6 @@
 
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
-
 window.findNRooksSolution = function(n) {
   var answer = [];
   var tempBoard = new Board({'n': n});
@@ -39,7 +38,7 @@ window.findNRooksSolution = function(n) {
     }
   }
 
-  // console.log('Single solution for ' + n + ' rooks:', JSON.stringify(answer));
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(answer));
   
   return answer;
 };
@@ -48,48 +47,42 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solution = findNRooksSolution(n); //fixme
+  // var solution = findNRooksSolution(n); //fixme
 
-  // // Base case
-  // if (n === 1) {
-  //   return 1;
+  // var comboArray = [];
+  // var positions = [];
+
+  // positions = generatePositions(n);
+
+  // for (var p = 0; p < positions.length; p++) {
+  //   var newBoard = new Board({'n': n});
+  //   for (var s = 0; s < positions[p].length; s++) {
+  //     newBoard.togglePiece(s, positions[p][s]);
+  //   }
+  //   comboArray.push(newBoard);
   // }
-  var comboArray = [];
-  var positions = [];
-  var input = '';
-  for (var i = 0; i < n; i++) {
-    input += '' + i;
-  }
 
-  function generateCombos(input, currentSequence) {
-    var nextInput;
-    var remainingPositions;
-
-    if (input == '') {
-      positions.push(currentSequence);
-    } else {
-      for (var i = 0; i < input.length; i++) {
-        remainingPositions = input.substr(0, i) + input.substr(i + 1, input.length - 1);
-        nextInput = currentSequence + input[i];
-        generateCombos(remainingPositions, nextInput);
-      }
-    }
-  }
-
-  generateCombos(input, '');
-
-  for (var p = 0; p < positions.length; p++) {
-    var newBoard = new Board({'n': n});
-    for (var s = 0; s < positions[p].length; s++) {
-      newBoard.togglePiece(s, positions[p][s]);
-    }
-    comboArray.push(newBoard);
-  }
-
-  solutionCount = comboArray.length;
+  // solutionCount = comboArray.length;
 
   // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+  // return solutionCount;
+
+  // The number of n rooks solutions is n!
+  function factorial(n) {
+    if (n === 0) {
+      return 0;
+    }
+
+    if (n === 1) {
+      return 1;
+    }
+
+    if (n > 1) {
+      return (n * factorial(n - 1));
+    }
+  }
+
+  return factorial(n);
 };
 
 
@@ -100,65 +93,30 @@ window.findNQueensSolution = function(n) {
   var comboArray = [];
   var positions = [];
   var input = '';
-
-  if (n === 0) {
-    var tempBoard = new Board({'n': 0});
-    var answer = [];
-    for (var value in tempBoard.attributes) {
-      if (value !== 'n') {
-        answer.push(tempBoard.attributes[value]);
-      }
-    }
-    return answer;
-  }
-
-
-  for (var i = 0; i < n; i++) {
-    input += '' + i;
-  }
-
-  function generateCombos(input, currentSequence) {
-    var nextInput;
-    var remainingPositions;
-
-    if (input == '') {
-      positions.push(currentSequence);
-    } else {
-      for (var i = 0; i < input.length; i++) {
-        remainingPositions = input.substr(0, i) + input.substr(i + 1, input.length - 1);
-        nextInput = currentSequence + input[i];
-        generateCombos(remainingPositions, nextInput);
-      }
-    }
-  }
-
-  generateCombos(input, '');
-
   var answer = [];
   var answerBoard = [];
+
+  positions = generatePositions(n);
+
   for (var p = 0; p < positions.length; p++) {
+    for (var i = 0; i < n - 1; i++) {
+      if (p !== positions.length - 1 && positions[p][i+1] && (Math.abs(positions[p][i] - positions[p][i + 1]) === 1)) {
+        
+        p++;
+        i = 0;
+      }
+    }
     var newBoard = new Board({'n': n});
     for (var s = 0; s < positions[p].length; s++) {
       newBoard.togglePiece(s, positions[p][s]);
     }
     if (!newBoard.hasAnyMajorDiagonalConflicts() && !newBoard.hasAnyMinorDiagonalConflicts()) {
-      // var tempBoard = new Board({'n': 0});
-      // for (var value in newBoard.attributes) {
       for (var v = 0; v < n; v++) {
-        // if (v !== 'n') {
         answer.push(newBoard.attributes[v]);
-        // }
       }
-      // console.log('ANSWER:', answer);
       return answer;
-      // answerBoard.push(answer);
-      // console.log(answerBoard);
-      // return newBoard;
     } 
-    // comboArray.push(newBoard);
   }
-  // console.log('!! no solutions');
-
 
   return new Board({'n': n}).rows();
 
@@ -169,24 +127,54 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solution = undefined; //fixme
+  // var solution = undefined; //fixme
 
-    var comboArray = [];
+  var comboArray = [];
   var positions = [];
-  var input = '';
   var count = 0;
+  var answer = [];
+  var answerBoard = [];
 
-  // if (n === 0) {
-  //   var tempBoard = new Board({'n': 0});
-  //   var answer = [];
-  //   for (var value in tempBoard.attributes) {
-  //     if (value !== 'n') {
-  //       answer.push(tempBoard.attributes[value]);
-  //     }
-  //   }
-  //   return answer;
-  // }
+  positions = generatePositions(n);
 
+  for (var p = 0; p < positions.length; p++) {
+    for (var i = 0; i < n - 1; i++) {
+      if (p !== positions.length - 1 && positions[p][i+1] && (Math.abs(positions[p][i] - positions[p][i + 1]) === 1)) {
+        
+        p++;
+        i = 0;
+      }
+    }
+    var newBoard = new Board({'n': n});
+    for (var s = 0; s < positions[p].length; s++) {
+      newBoard.togglePiece(s, positions[p][s]);
+    }
+    if (!newBoard.hasAnyMajorDiagonalConflicts() && !newBoard.hasAnyMinorDiagonalConflicts()) {
+      count++;
+    } 
+  }
+
+  console.log('Number of solutions for ' + n + ' queens:', count);
+
+  return count;
+};
+
+
+
+// Refactoring
+
+// Recursive function to return unique potential combinations of the boards
+// Returns an array of strings representing the positions in each row
+// where the game piece will be
+// 
+// Example:
+// var result = [ '0123', '0132' ]
+// result[0][0]: '0' - Row 1 (top row), column 0 has the game piece
+// result[0][1]: '1' - Row 1 (second row), column 1 has the game piece
+// and so on...
+window.generatePositions = function(n) {
+  var result = [];
+  var input = ''; // Initialize for recursive function
 
   for (var i = 0; i < n; i++) {
     input += '' + i;
@@ -197,7 +185,7 @@ window.countNQueensSolutions = function(n) {
     var remainingPositions;
 
     if (input == '') {
-      positions.push(currentSequence);
+      result.push(currentSequence);
     } else {
       for (var i = 0; i < input.length; i++) {
         remainingPositions = input.substr(0, i) + input.substr(i + 1, input.length - 1);
@@ -209,31 +197,7 @@ window.countNQueensSolutions = function(n) {
 
   generateCombos(input, '');
 
-  var answer = [];
-  var answerBoard = [];
-  for (var p = 0; p < positions.length; p++) {
-    var newBoard = new Board({'n': n});
-    for (var s = 0; s < positions[p].length; s++) {
-      newBoard.togglePiece(s, positions[p][s]);
-    }
-    if (!newBoard.hasAnyMajorDiagonalConflicts() && !newBoard.hasAnyMinorDiagonalConflicts()) {
-      // var tempBoard = new Board({'n': 0});
-      // for (var value in newBoard.attributes) {
-      // for (var v = 0; v < n; v++) {
-      //   // if (v !== 'n') {
-      //   answer.push(newBoard.attributes[v]);
-      //   count++;
-      //   // }
-      // }
-      count++;
-      // console.log('ANSWER:', answer);
-      // answerBoard.push(answer);
-      // console.log(answerBoard);
-      // return newBoard;
-    } 
-    // comboArray.push(newBoard);
-  }
+  return result;
+}
 
-  console.log('Number of solutions for ' + n + ' queens:', count);
-  return count;
-};
+
