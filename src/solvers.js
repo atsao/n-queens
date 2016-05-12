@@ -47,42 +47,43 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  // var solution = findNRooksSolution(n); //fixme
+  var comboArray = [];
+  var positions = [];
 
-  // var comboArray = [];
-  // var positions = [];
+  positions = generatePositions(n);
 
-  // positions = generatePositions(n);
+  return positions.length;
 
-  // for (var p = 0; p < positions.length; p++) {
-  //   var newBoard = new Board({'n': n});
-  //   for (var s = 0; s < positions[p].length; s++) {
-  //     newBoard.togglePiece(s, positions[p][s]);
-  //   }
-  //   comboArray.push(newBoard);
-  // }
+//   for (var p = 0; p < positions.length; p++) {
+//     var newBoard = new Board({'n': n});
+//     for (var s = 0; s < positions[p].length; s++) {
+//       newBoard.togglePiece(s, positions[p][s]);
+//     }
+//     // comboArray.push(newBoard);
+//     count++;
+//   }
+// return count;
+//   solutionCount = comboArray.length;
 
-  // solutionCount = comboArray.length;
-
-  // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  // return solutionCount;
+//   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+//   return solutionCount;
 
   // The number of n rooks solutions is n!
-  function factorial(n) {
-    if (n === 0) {
-      return 0;
-    }
+  // function factorial(n) {
+  //   if (n === 0) {
+  //     return 0;
+  //   }
 
-    if (n === 1) {
-      return 1;
-    }
+  //   if (n === 1) {
+  //     return 1;
+  //   }
 
-    if (n > 1) {
-      return (n * factorial(n - 1));
-    }
-  }
+  //   if (n > 1) {
+  //     return (n * factorial(n - 1));
+  //   }
+  // }
 
-  return factorial(n);
+  // return factorial(n);
 };
 
 
